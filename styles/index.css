@@ -134,31 +134,82 @@ h2 {
   border-top: 1px solid #000000;
 }
 
-.hidden {
-  display: none;
-}
 
-/* Progress Indicators */
+/* Container */
 .progress-container {
-  padding: 0 8px;
-}
-.progress {
-  display: inline-flex;
-  gap: .5rem;
-  justify-content: space-evenly;
-  align-items: center;
   width: 100%;
 }
 
+.progress {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+/* Each step */
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Circle */
+.progress-step::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #D1D1D1;
+  border: 1px solid #D1D1D1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  z-index: 1;
+}
+
+/* Connector line */
+.progress-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: -50%;
+  width: 100%;
+  height: 1px;
+  background-color: #D1D1D1;
+  z-index: 0;
+}
+
+/* Text link */
 .progress-step a {
   text-decoration: none;
-  color: #000000;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: .32px;
+  font-weight: 400;
+  color: #242424;
+}
+
+.progress-step.completed::before {
+  background-color: #0a8754;
+  border-color: #0a8754;
+  background-image: url('../assets/check.svg');
+}
+
+/* Active */
+.progress-step.active::before {
+  background-color: #fff;
+  border-color: #D1D1D1;
 }
 
 .progress-step a.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  color: #242424;
   pointer-events: none;
+  cursor: not-allowed;
 }
 
 .form-header {
@@ -345,4 +396,9 @@ button {
   letter-spacing: 0.32px;
   color: #424242;
   margin-bottom: 12px;
+}
+
+
+.hidden {
+  display: none;
 }

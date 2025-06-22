@@ -47,6 +47,22 @@ class WorkflowBuilder {
         const checkboxes = step.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
           checkbox.addEventListener('change', this.validateCurrentStep);
+
+          checkbox.addEventListener('change', () => {
+            const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
+            if (container) {
+              if (checkbox.checked) {
+                container.classList.add('selected');
+              } else {
+                container.classList.remove('selected');
+              }
+            }
+          });
+
+          const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
+          if (container && checkbox.checked) {
+            container.classList.add('selected');
+          }
         });
       });
     }
@@ -59,6 +75,15 @@ class WorkflowBuilder {
         const recordTypeCheckboxes = this.form.elements['recordType'];
         Array.from(recordTypeCheckboxes).forEach(checkbox => {
           checkbox.checked = selectAllCheckbox.checked;
+          // update parent with selected class
+          const container = checkbox.closest('.selection-card');
+          if (container) {
+            if (selectAllCheckbox.checked) {
+              container.classList.add('selected');
+            } else {
+              container.classList.remove('selected');
+            }
+          }
         });
         this.validateCurrentStep();
       });
@@ -321,20 +346,24 @@ class WorkflowBuilder {
    * Update navigation buttons visibility based on current step
    */
   updateNavigationButtons() {
-    // Show/hide back button
+    console.log(this.currentStepIndex);
+
     if (this.currentStepIndex === 0) {
       this.backButton.classList.add('hidden');
     } else {
       this.backButton.classList.remove('hidden');
     }
 
-    // Show/hide save button on last step
-    if (this.currentStepIndex === this.steps.length - 1) {
+    if (this.currentStepIndex > 1) {
       this.saveButton.classList.remove('hidden');
-      this.nextButton.classList.add('hidden');
     } else {
       this.saveButton.classList.add('hidden');
-      this.nextButton.classList.remove('hidden');
+    }
+
+    if (this.currentStepIndex === this.steps.length - 1) {
+      this.nextButton.textContent = 'Save Draft';
+    } else {
+      this.nextButton.textContent = 'Next';
     }
   }
 
