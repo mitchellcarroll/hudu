@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "checkJs": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "baseUrl": ".",
+    "paths": {
+      "/*": [
+        "*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+, "scripts/index.js"  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
