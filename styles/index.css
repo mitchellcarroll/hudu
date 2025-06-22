@@ -1,0 +1,199 @@
+/* Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+  margin: 0;
+}
+
+/* Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', 'SF Pro Text', 'SF Pro Display', -apple-system, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Improve media defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Avoid text overflows */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+fieldset {
+  border: none;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #242424;
+}
+
+
+.workflow-builder {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 1rem;
+  border-top: 1px solid #000000;
+}
+
+.hidden {
+  display: none;
+}
+
+.progress {
+  display: inline-flex;
+  gap: .5rem;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+
+.progress-step a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.progress-step a.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-header-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.selection-card {
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+}
+
+.form-navigation {
+  box-shadow: 4px 0px 6px 0px rgba(19, 1, 54, 0.16);
+  padding: .5rem 1rem;
+  border-top: 1px solid #D1D1D1;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: end;
+  align-items: center;
+}
+
+.button-link {
+  font-size: 14px;
+  color: #2F6DE9;
+  text-decoration: underline;
+  background-color: #FFFFFF;
+  border: none;
+}
+
+.save-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+}
+
+.button-primary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-color: transparent;
+  background-color: #1849A9;
+  color: #FFFFFF;
+}
+
+.button-secondary {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1849A9;
+  max-width: 280px;
+}
+
+.exit-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  padding: 8px;
+  border-color: transparent;
+  background-color: #FFFFFF;
+}

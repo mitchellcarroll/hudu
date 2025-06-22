@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Workflow Builder interface for creating and managing workflows">
+  <title>Workflow Builder</title>
+  <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+  <div class="workflow-builder" role="application">
+    <header>
+      <h1 class="hidden">Workflow Builder</h1>
+    </header>
+    <main>
+      <form action="javascript:void(0);" name="workflowBuilder" id="workflowBuilder" novalidate>
+        <div class="form-header" role="banner">
+          <div class="form-header-content">
+            <h2>New Workflow</h2>
+            <button type="button" class="exit-btn" aria-label="Close workflow builder">X</button>
+          </div>
+          <nav class="progress-container" aria-label="Workflow steps">
+            <div class="progress" role="tablist">
+              <div class="progress-step" data-progress-step="criteriaStepOne" role="tab" aria-selected="true"
+                aria-controls="criteriaStepOne">
+                <a href="#criteriaStepOne">Criteria</a>
+              </div>
+              <div class="progress-step" data-progress-step="criteriaStepTwo" role="tab" aria-selected="false"
+                aria-controls="criteriaStepThree">
+                <a href="#criteriaStepThree">Trigger</a>
+              </div>
+              <div class="progress-step" data-progress-step="criteriaStepThree" role="tab" aria-selected="false"
+                aria-controls="criteriaStepFour">
+                <a href="#criteriaStepFour">Action</a>
+              </div>
+              <div class="progress-step" data-progress-step="criteriaStepFour" role="tab" aria-selected="false"
+                aria-controls="criteriaStepFour">
+                <a href="#criteriaStepFive">Review</a>
+              </div>
+            </div>
+          </nav>
+        </div>
+
+        <fieldset id="criteriaStepOne" class="criteriaStep" role="tabpanel">
+          <legend>What will this workflow be based on?</legend>
+          <p class="helper-text">Select the type of workflow you want to create.</p>
+          <div class="checkbox-container">
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeCompany" value="Company" required>
+              <label for="workflowTypeCompany">Company</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeRecord" value="Record">
+              <label for="workflowTypeRecord">Record</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeWebsite" value="Website">
+              <label for="workflowTypeWebsite">Website</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeExpiration" value="Expiration">
+              <label for="workflowTypeExpiration">Expiration</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeUser" value="User">
+              <label for="workflowTypeUser">User</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeGroup" value="Group">
+              <label for="workflowTypeGroup">Group</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="workflowType" id="workflowTypeIntegration" value="Integration">
+              <label for="workflowTypeIntegration">Integration</label>
+            </div>
+          </div>
+
+        </fieldset>
+        <fieldset id="criteriaStepTwo" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <legend>Which record type(s) should be included?</legend>
+          <p class="helper-text">Select at least one record type to include in this workflow.</p>
+          <div class="checkbox-container">
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypePassword" value="Password">
+              <label for="recordTypePassword">Password</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeCompanyKB" value="Company KB article">
+              <label for="recordTypeCompanyKB">Company KB article</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeCentralKB" value="Central KB article">
+              <label for="recordTypeCentralKB">Central KB article</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeProcess" value="Process">
+              <label for="recordTypeProcess">Process</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeWebsite" value="Website">
+              <label for="recordTypeWebsite">Website</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeRack" value="Rack">
+              <label for="recordTypeRack">Rack</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeNetwork" value="Network">
+              <label for="recordTypeNetwork">Network</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="recordType" id="recordTypeAsset" value="Asset">
+              <label for="recordTypeAsset">Asset</label>
+            </div>
+            <div class="selection-card select-all">
+              <input type="checkbox" name="selectAllRecordTypes" id="selectAllRecordTypes">
+              <label for="selectAllRecordTypes">Select All</label>
+            </div>
+          </div>
+
+
+        </fieldset>
+        <fieldset id="criteriaStepThree" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <legend>Which should trigger this workflow?</legend>
+          <p class="helper-text">Select at least one trigger for this workflow.</p>
+          <div class="checkbox-container">
+            <div class="selection-card">
+              <input type="checkbox" name="trigger" id="triggerRecordCreated" value="created">
+              <label for="triggerRecordCreated">Record created</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="trigger" id="triggerRecordUpdated" value="updated">
+              <label for="triggerRecordUpdated">Record updated</label>
+            </div>
+        </fieldset>
+        <fieldset id="criteriaStepFour" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <legend>What should happen once the workflow begins?</legend>
+          <p class="helper-text">Select at least 1 action to continue. You can add additional actions later.</p>
+          <div class="checkbox-container">
+            <div class="selection-card">
+              <input type="checkbox" name="action" id="actionAddFlag" value="add a flag">
+              <label for="actionAddFlag">Add flag</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="action" id="actionSendEmail" value="send an email">
+              <label for="actionSendEmail">Send email</label>
+            </div>
+            <div class="selection-card">
+              <input type="checkbox" name="action" id="actionSendWebhook" value="send a webhook">
+              <label for="actionSendWebhook">Send webhook</label>
+            </div>
+          </div>
+
+        </fieldset>
+        <fieldset id="criteriaStepFive" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <legend>Review your workflow below. Click a step to make edits if needed.</legend>
+          <div class="review" aria-live="polite">
+            <div id="reviewContent"></div>
+          </div>
+        </fieldset>
+
+        <div class="form-navigation" role="group" aria-label="Form navigation">
+          <div class="button-container">
+            <button type="button" class="button-link" id="backButton"
+              aria-label="Go back to previous step">Back</button>
+            <div class="save-buttons">
+              <button type="button" class="button-secondary" id="saveButton">Save and Finish Later</button>
+              <button type="button" class="button-primary" id="nextButton">Next</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+  <script src="scripts/index.js" defer></script>
+</body>
+
+</html>
