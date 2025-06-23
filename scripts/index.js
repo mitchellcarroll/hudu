@@ -26,6 +26,7 @@ class WorkflowBuilder {
     }
 
     this.initializeForm();
+    this.loadDraft();
 
     this.goToNextStep = this.goToNextStep.bind(this);
     this.goToPreviousStep = this.goToPreviousStep.bind(this);
@@ -54,6 +55,11 @@ class WorkflowBuilder {
     if (this.nextButton && this.backButton) {
       this.nextButton.addEventListener('click', this.goToNextStep);
       this.backButton.addEventListener('click', this.goToPreviousStep);
+    }
+
+    // Save draft with feedback on explicit save
+    if (this.saveButton) {
+      this.saveButton.addEventListener('click', () => this.saveDraft(true));
     }
 
     if (this.steps && this.steps.length > 0) {
@@ -195,6 +201,8 @@ class WorkflowBuilder {
       this.form.scrollIntoView({ behavior: 'smooth' });
 
       this.validateCurrentStep();
+    } else if (this.currentStepIndex === this.steps.length - 1 && this.validateCurrentStep()) {
+      this.saveDraft(false); // this is for save draft btn at review step
     }
   }
 
@@ -395,6 +403,83 @@ class WorkflowBuilder {
     const allButLast = items.slice(0, -1).join(', ');
     const last = items[items.length - 1];
     return `${allButLast}, ${conjunction} ${last}`;
+  }
+
+  /**
+   * Save current form state to localStorage
+   */
+  saveDraft(showFeedback = false) {
+    try {
+      const data = {
+        step: this.currentStepIndex,
+        values: {}
+      };
+
+      Array.from(this.form.elements).forEach(el => {
+        if (!el.name) return;
+        if (el.type === 'checkbox') {
+          if (!data.values[el.name]) data.values[el.name] = [];
+          if (el.checked) data.values[el.name].push(el.value);
+        } else if (el.type !== 'button' && el.type !== 'submit') {
+          data.values[el.name] = el.value;
+        }
+      });
+
+      localStorage.setItem('workflowDraft', JSON.stringify(data));
+      if (showFeedback && this.saveButton) {
+        this.saveButton.textContent = 'Saved';
+        setTimeout(() => { this.saveButton.textContent = 'Save and Finish Later'; }, 1500);
+      }
+    } catch (e) {
+      console.error('Failed to save draft', e);
+    }
+  }
+
+  /**
+   * Load draft from localStorage if present
+   */
+  loadDraft() {
+    try {
+      const raw = localStorage.getItem('workflowDraft');
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data || !data.values) return;
+
+      // restore values
+      Object.entries(data.values).forEach(([name, value]) => {
+        /** @type {NodeListOf<HTMLInputElement>} */
+        const inputs = this.form.querySelectorAll(`[name="${name}"]`);
+        inputs.forEach(input => {
+          if (input.type === 'checkbox') {
+            input.checked = Array.isArray(value) && value.includes(input.value);
+            this.updateSelectionClass(input);
+          } else {
+            input.value = value;
+          }
+        });
+      });
+
+      if (typeof data.step === 'number' && data.step >= 0 && data.step < this.steps.length) {
+        // hide initial first step
+        this.steps[this.currentStepIndex].classList.add('hidden');
+        this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'true');
+
+        this.currentStepIndex = data.step;
+        this.steps[this.currentStepIndex].classList.remove('hidden');
+        this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'false');
+      }
+
+      // refresh UI
+      this.updateProgressIndicator();
+      this.updateNavigationButtons();
+      this.validateCurrentStep();
+      this.showConditionalButton();
+      if (this.currentStepIndex === this.steps.length - 1) {
+        this.updateReviewSummary();
+      }
+    } catch (e) {
+      console.error('Failed to load draft', e);
+    }
   }
 
   /**
