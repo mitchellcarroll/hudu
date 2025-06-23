@@ -24,12 +24,13 @@ It can also be reviewed on GitHub at https://github.com/mitchellcarroll/hudu/tre
 
 ```
 Hudu/
-├── index.html              ← entry point you open in the browser
-├── styles/
-│   └── main.css            ← application styles
-├── scripts/
-│   └── index.js            ← all front-end logic (WorkflowBuilder class)
-└── README.md               
+├── index.html              ← entry point for production build
+├── src/
+│   ├── index.js            ← WorkflowBuilder logic
+│   └── index.css           ← styles
+├── package.json            ← npm metadata & scripts
+├── vite.config.js          ← Vite configuration
+└── README.md
 ```
 
 ---
@@ -42,10 +43,15 @@ Hudu/
    cd hudu
    ```
 
-2. **Open `index.html` in any browser**  
-   Double-click the file or drag-and-drop it into Chrome, Firefox, Edge, or Safari.
+2. **Install dependencies & start the dev server**  
+   ```bash
+   npm install
+   npm run dev
+   ```
+   This launches Vite on `http://localhost:5173` (or the next free port).
 
-   That’s it – the app is fully client-side, so no additional servers, bundlers, or compilers are needed.
+3. **Open the classic standalone version (without Vite)**  
+   Simply double-click `index.html` if you prefer not to use the dev server or drag-and-drop it into your browser. Since the application is fully client-side, no server, bundler, or compiler is required.
 
 ## Clearing Your Draft
 
