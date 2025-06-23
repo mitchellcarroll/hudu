@@ -13,6 +13,8 @@ class WorkflowBuilder {
     this.backButton = this.form.querySelector('#backButton');
     /** @type {HTMLButtonElement} */
     this.saveButton = this.form.querySelector('#saveButton');
+    /** @type {HTMLButtonElement} */
+    this.conditionalButton = this.form.querySelector('#conditionalButton');
     /** @type {NodeListOf<HTMLDivElement>} */
     this.progressSteps = this.form.querySelectorAll('.progress-step');
     /** @type {number} */
@@ -28,8 +30,21 @@ class WorkflowBuilder {
     this.goToNextStep = this.goToNextStep.bind(this);
     this.goToPreviousStep = this.goToPreviousStep.bind(this);
     this.validateCurrentStep = this.validateCurrentStep.bind(this);
+    this.updateSelectionClass = this.updateSelectionClass.bind(this);
+    this.showConditionalButton = this.showConditionalButton.bind(this);
 
     this.setupEventListeners();
+  }
+
+  /**
+   * 
+   * @param {HTMLInputElement} checkbox 
+   */
+  updateSelectionClass(checkbox) {
+    const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
+    if (container) {
+      container.classList.toggle('selected', checkbox.checked);
+    }
   }
 
   /**
@@ -45,24 +60,15 @@ class WorkflowBuilder {
       this.steps.forEach(step => {
         /** @type {NodeListOf<HTMLInputElement>} */
         const checkboxes = step.querySelectorAll('input[type="checkbox"]');
+      
         checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', this.validateCurrentStep);
-
           checkbox.addEventListener('change', () => {
-            const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
-            if (container) {
-              if (checkbox.checked) {
-                container.classList.add('selected');
-              } else {
-                container.classList.remove('selected');
-              }
-            }
+            this.validateCurrentStep();
+            this.updateSelectionClass(checkbox);
+            this.showConditionalButton();
           });
-
-          const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
-          if (container && checkbox.checked) {
-            container.classList.add('selected');
-          }
+      
+          this.updateSelectionClass(checkbox);
         });
       });
     }
@@ -96,6 +102,14 @@ class WorkflowBuilder {
           selectAllCheckbox.checked = allChecked;
         });
       });
+    }
+  }
+
+  showConditionalButton() {
+    if (this.currentStepIndex === 2) {
+      this.conditionalButton.classList.remove('hidden');
+    } else {
+      this.conditionalButton.classList.add('hidden');
     }
   }
 
@@ -346,8 +360,6 @@ class WorkflowBuilder {
    * Update navigation buttons visibility based on current step
    */
   updateNavigationButtons() {
-    console.log(this.currentStepIndex);
-
     if (this.currentStepIndex === 0) {
       this.backButton.classList.add('hidden');
     } else {

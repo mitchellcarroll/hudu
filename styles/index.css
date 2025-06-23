@@ -348,6 +348,11 @@ input:focus-visible + label {
 
 .selection-icon {
   flex-shrink: 0;
+  color: #242424;
+}
+
+.selection-icon .icon-selected {
+  display: none;
 }
 
 .selection-card:hover {
@@ -358,6 +363,15 @@ input:focus-visible + label {
   background-color: var(--color-blue-selected);
   border-color: var(--color-primary);
 }
+
+.selection-card.selected .selection-icon .icon-default {
+  display: none;
+}
+
+.selection-card.selected .selection-icon .icon-selected {
+  display: inline;
+}
+
 
 /* ---------------------------------------------------------------------
   Form Modifiers
