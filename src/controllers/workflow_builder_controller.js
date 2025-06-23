@@ -94,7 +94,9 @@ export default class extends Controller {
    * Only allows navigating to already-completed steps.
    */
   goToStep(event) {
-    const navIdx = this.progressStepTargets.indexOf(event.currentTarget);
+    const navEl = event.currentTarget.closest('[data-workflow-builder-target="progressStep"]') ?? event.currentTarget;
+    const navIdx = this.progressStepTargets.indexOf(navEl);
+    if (navIdx === -1) return;
     const targetStep = navIdx === 0 ? 0 : navIdx + 1;
 
     if (targetStep <= this.currentStepIndex) {
