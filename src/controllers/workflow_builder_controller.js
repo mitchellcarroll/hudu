@@ -18,13 +18,24 @@ export default class extends Controller {
 
   /** Called once when the controller is connected to the DOM */
   connect() {
-    // Ensure we start at page 0 if the attribute is missing
+    this.form = this.element.querySelector("form") || document.forms.namedItem("workflowBuilder");
+    this.loadDraft();
+
     if (isNaN(this.currentStepIndex)) {
       this.currentStepIndex = 0;
     }
 
     this.showCurrentStep();
     this.validate();
+  }
+
+  /**
+   * Stimulus action handler for the "Save & Finish Later" button.
+   * Declared in markup via: data-action="workflow-builder#saveAndFinishLater"
+   */
+  saveAndFinishLater(event) {
+    event?.preventDefault();
+    this.saveDraft(true);
   }
 
   /* ------------------------------------------------------------------
@@ -70,14 +81,16 @@ export default class extends Controller {
     if (!this.validate()) return;
 
     if (this.isReviewStep) {
-      // Submit or "save draft" logic would live here.
-      // For now we simply bail out.
+      // Reached the final step, treat the primary button as "Save Draft"
+      this.saveDraft(false);
+      this.nextTarget.textContent = "Saved Draft";
       return;
     }
 
     this.currentStepIndex++;
     this.showCurrentStep();
     this.validate();
+    // this.saveDraft(false); // If data needs to persist on "next" click then uncomment this line
   }
 
   /** Handle click on the "Back" button */
@@ -87,6 +100,7 @@ export default class extends Controller {
     this.currentStepIndex--;
     this.showCurrentStep();
     this.validate();
+    // this.saveDraft(false); // If data needs to persist on "back" click then uncomment this line
   }
 
   /**
@@ -117,7 +131,11 @@ export default class extends Controller {
     this.nextTarget.disabled = !valid;
     this.saveTarget.classList.toggle("hidden", this.currentStepIndex <= 1);
 
-    if (this.isReviewStep) this.updateReviewSummary();
+    if (this.isReviewStep) {
+      this.updateReviewSummary();
+      this.nextTarget.disabled = false;
+      return true; // return true since there are no inputs on the review step
+    }
 
     return valid;
   }
@@ -199,6 +217,80 @@ export default class extends Controller {
       this.reviewTarget.appendChild(err);
     }
   }
+
+  /* ------------------------------------------------------------------
+   * Draft persistence
+   * ------------------------------------------------------------------*/
+
+  /**
+   * Serialize current form state and persist it to localStorage.
+   * @param {boolean} showFeedback if true, briefly replaces the Save & Finish Later button text with "Saved".
+   */
+  saveDraft(showFeedback = false) {
+    if (!this.form) return;
+    try {
+      const data = {
+        step: this.currentStepIndex,
+        values: {}
+      };
+      Array.from(this.form.elements).forEach(el => {
+        if (!el.name) return;
+        if (el.type === "checkbox") {
+          if (!data.values[el.name]) data.values[el.name] = [];
+          if (el.checked) data.values[el.name].push(el.value);
+        } else if (el.type !== "button" && el.type !== "submit") {
+          data.values[el.name] = el.value;
+        }
+      });
+      localStorage.setItem("workflowDraft", JSON.stringify(data));
+
+      if (showFeedback && this.hasSaveTarget) {
+        const original = this.saveTarget.textContent;
+        this.saveTarget.textContent = "Saved";
+        setTimeout(() => (this.saveTarget.textContent = original), 3000);
+      }
+    } catch (e) {
+      console.error("Failed to save draft", e);
+    }
+  }
+
+  /**
+   * Attempt to load a previously saved draft from localStorage.
+   * Restores form field values and step index if available.
+   */
+  loadDraft() {
+    if (!this.form) return;
+    try {
+      const raw = localStorage.getItem("workflowDraft");
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data || !data.values) return;
+
+      // Restore field values
+      Object.entries(data.values).forEach(([name, value]) => {
+        const inputs = this.form.querySelectorAll(`[name="${name}"]`);
+        inputs.forEach(input => {
+          if (input.type === "checkbox") {
+            input.checked = Array.isArray(value) && value.includes(input.value);
+            input.closest('.selection-card, .select-all')?.classList.toggle('selected', input.checked);
+          } else {
+            input.value = value;
+          }
+        });
+      });
+
+      if (
+        typeof data.step === "number" &&
+        data.step >= 0 &&
+        data.step < this.stepTargets.length
+      ) {
+        this.currentStepIndex = data.step;
+      }
+    } catch (e) {
+      console.error("Failed to load draft", e);
+    }
+  }
+
 
   get isReviewStep() {
     return this.currentStepIndex === this.stepTargets.length - 1;
