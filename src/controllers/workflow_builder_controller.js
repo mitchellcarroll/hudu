@@ -1,8 +1,13 @@
+import { Controller } from "@hotwired/stimulus";
+
 /**
- * WorkflowBuilder class to handle multi-step form functionality
+ * WorkflowBuilder controller to handle multi-step form functionality
  */
-class WorkflowBuilder {
-  constructor() {
+export default class WorkflowBuilder extends Controller {
+  // Define Stimulus targets for elements we'll interact with
+  static targets = [];
+
+  connect() {
     /** @type {HTMLFormElement} */
     this.form = document.forms.namedItem('workflowBuilder');
     /** @type {HTMLFieldSetElement[]} */
@@ -25,14 +30,14 @@ class WorkflowBuilder {
       return;
     }
 
-    this.initializeForm();
-
+    // Bind methods to preserve 'this' context
     this.goToNextStep = this.goToNextStep.bind(this);
     this.goToPreviousStep = this.goToPreviousStep.bind(this);
     this.validateCurrentStep = this.validateCurrentStep.bind(this);
     this.updateSelectionClass = this.updateSelectionClass.bind(this);
     this.showConditionalButton = this.showConditionalButton.bind(this);
 
+    this.initializeForm();
     this.setupEventListeners();
   }
 
@@ -430,8 +435,3 @@ class WorkflowBuilder {
     }
   }
 }
-
-// Initialize the workflow builder when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-  new WorkflowBuilder();
-});

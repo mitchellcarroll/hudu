@@ -20,7 +20,7 @@
   },
   "include": [
     "src/**/*"
-, "scripts/index.js"  ],
+, "workflow-builder/src/application.js", "workflow-builder/src/controllers"  ],
   "exclude": [
     "node_modules",
     "dist"

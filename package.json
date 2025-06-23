@@ -1,0 +1,21 @@
+{
+  "name": "workflow-builder",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Workflow Builder interface for creating and managing workflows",
+  "main": "index.js",
+  "type": "module",
+  "author": "Mitchell Carroll",
+  "license": "ISC",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}
