@@ -344,6 +344,8 @@ input:focus-visible + label {
 .selection-card label span {
   font-size: var(--font-size-base);
   font-weight: 500;
+  line-height: 20px;
+  letter-spacing: .1px;
 }
 
 .selection-icon {
@@ -361,7 +363,7 @@ input:focus-visible + label {
 
 .selection-card.selected {
   background-color: var(--color-blue-selected);
-  border-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
 }
 
 .selection-card.selected .selection-icon .icon-default {
@@ -416,6 +418,11 @@ input:focus-visible + label {
   letter-spacing: .1px;
 }
 
+.select-all-checkbox {
+  height: 20px;
+  width: 20px;
+  accent-color: var(--color-primary);
+}
 
 /* ---------------------------------------------------------------------
   Final Review Step
