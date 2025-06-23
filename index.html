@@ -30,30 +30,30 @@
           
           <nav class="progress-container" aria-label="Workflow steps">
             <div class="progress" role="tablist">
-              <div class="progress-step" data-progress-step="criteriaStepOne" role="tab" aria-selected="true"
+              <div class="progress-step" data-workflow-builder-target="progressStep" data-progress-step="criteriaStepOne" role="tab" aria-selected="true"
                 aria-controls="criteriaStepOne">
-                <a href="#criteriaStepOne">Criteria</a>
+                <a data-action="click->workflow-builder#goToStep" href="#criteriaStepOne">Criteria</a>
               </div>
-              <div class="progress-step" data-progress-step="criteriaStepTwo" role="tab" aria-selected="false"
+              <div class="progress-step" data-workflow-builder-target="progressStep" data-progress-step="criteriaStepTwo" role="tab" aria-selected="false"
                 aria-controls="criteriaStepThree">
-                <a href="#criteriaStepThree">Trigger</a>
+                <a data-action="click->workflow-builder#goToStep" href="#criteriaStepThree">Trigger</a>
               </div>
-              <div class="progress-step" data-progress-step="criteriaStepThree" role="tab" aria-selected="false"
+              <div class="progress-step" data-workflow-builder-target="progressStep" data-progress-step="criteriaStepThree" role="tab" aria-selected="false"
                 aria-controls="criteriaStepFour">
-                <a href="#criteriaStepFour">Action</a>
+                <a data-action="click->workflow-builder#goToStep" href="#criteriaStepFour">Action</a>
               </div>
-              <div class="progress-step" data-progress-step="criteriaStepFour" role="tab" aria-selected="false"
+              <div class="progress-step" data-workflow-builder-target="progressStep" data-progress-step="criteriaStepFour" role="tab" aria-selected="false"
                 aria-controls="criteriaStepFour">
-                <a href="#criteriaStepFive">Review</a>
+                <a data-action="click->workflow-builder#goToStep" href="#criteriaStepFive">Review</a>
               </div>
             </div>
           </nav>
           
-          <fieldset id="criteriaStepOne" class="criteriaStep" role="tabpanel">
+          <fieldset data-workflow-builder-target="step" id="criteriaStepOne" class="criteriaStep" role="tabpanel">
             <legend>What will this workflow be based on?</legend>
             <div class="checkbox-container">
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeCompany" value="Company" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeCompany" value="Company" class="visually-hidden">
                 <label for="workflowTypeCompany">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -63,7 +63,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeRecord" value="Record" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeRecord" value="Record" class="visually-hidden">
                 <label for="workflowTypeRecord">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <!-- Default Icon -->
@@ -73,7 +73,7 @@
                       fill="#242424"
                     />
                   
-                    <!-- Selected Icon (scaled up and centered) -->
+                    <!-- Selected Icon -->
                     <g class="icon-selected" transform="translate(3,2) scale(1.2)">
                       <path
                         d="M3 0H12H13C13.5312 0 14 0.46875 14 1V11C14 11.5625 13.5312 12 13 12V14C13.5312 14 14 14.4688 14 15C14 15.5625 13.5312 16 13 16H12H3C1.34375 16 0 14.6562 0 13V3C0 1.34375 1.34375 0 3 0ZM3 12C2.4375 12 2 12.4688 2 13C2 13.5625 2.4375 14 3 14H11V12H3ZM4 4.5C4 4.78125 4.21875 5 4.5 5H10.5C10.75 5 11 4.78125 11 4.5C11 4.25 10.75 4 10.5 4H4.5C4.21875 4 4 4.25 4 4.5ZM4.5 6C4.21875 6 4 6.25 4 6.5C4 6.78125 4.21875 7 4.5 7H10.5C10.75 7 11 6.78125 11 6.5C11 6.25 10.75 6 10.5 6H4.5Z"
@@ -85,7 +85,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeWebsite" value="Website" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeWebsite" value="Website" class="visually-hidden">
                 <label for="workflowTypeWebsite">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <!-- Default icon path -->
@@ -105,7 +105,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeExpiration" value="Expiration" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeExpiration" value="Expiration" class="visually-hidden">
                 <label for="workflowTypeExpiration">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -115,7 +115,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeUser" value="User" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeUser" value="User" class="visually-hidden">
                 <label for="workflowTypeUser">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -125,7 +125,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeGroup" value="Group" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeGroup" value="Group" class="visually-hidden">
                 <label for="workflowTypeGroup">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -135,7 +135,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="workflowType" id="workflowTypeIntegration" value="Integration"
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="workflowType" id="workflowTypeIntegration" value="Integration"
                   class="visually-hidden">
                 <label for="workflowTypeIntegration">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
@@ -148,11 +148,11 @@
             </div>
           
           </fieldset>
-          <fieldset id="criteriaStepTwo" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <fieldset data-workflow-builder-target="step" id="criteriaStepTwo" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
             <legend>Which record type(s) should be included?</legend>
             <div class="checkbox-container">
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypePassword" value="Password" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypePassword" value="Password" class="visually-hidden">
                 <label for="recordTypePassword">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <!-- Default icon path -->
@@ -172,7 +172,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeCompanyKB" value="Company KB article"
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeCompanyKB" value="Company KB article"
                   class="visually-hidden">
                 <label for="recordTypeCompanyKB">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
@@ -195,7 +195,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeCentralKB" value="Central KB article"
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeCentralKB" value="Central KB article"
                   class="visually-hidden">
                 <label for="recordTypeCentralKB">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
@@ -206,7 +206,7 @@
                       fill="#242424"
                     />
                   
-                    <!-- Selected Icon (scaled up and centered) -->
+                    <!-- Selected Icon -->
                     <g class="icon-selected" transform="translate(3,2) scale(1.2)">
                       <path
                         d="M3 0H12H13C13.5312 0 14 0.46875 14 1V11C14 11.5625 13.5312 12 13 12V14C13.5312 14 14 14.4688 14 15C14 15.5625 13.5312 16 13 16H12H3C1.34375 16 0 14.6562 0 13V3C0 1.34375 1.34375 0 3 0ZM3 12C2.4375 12 2 12.4688 2 13C2 13.5625 2.4375 14 3 14H11V12H3ZM4 4.5C4 4.78125 4.21875 5 4.5 5H10.5C10.75 5 11 4.78125 11 4.5C11 4.25 10.75 4 10.5 4H4.5C4.21875 4 4 4.25 4 4.5ZM4.5 6C4.21875 6 4 6.25 4 6.5C4 6.78125 4.21875 7 4.5 7H10.5C10.75 7 11 6.78125 11 6.5C11 6.25 10.75 6 10.5 6H4.5Z"
@@ -218,7 +218,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeProcess" value="Process" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeProcess" value="Process" class="visually-hidden">
                 <label for="recordTypeProcess">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -228,7 +228,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeWebsite" value="Website" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeWebsite" value="Website" class="visually-hidden">
                 <label for="recordTypeWebsite">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <!-- Default icon path -->
@@ -248,7 +248,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeRack" value="Rack" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeRack" value="Rack" class="visually-hidden">
                 <label for="recordTypeRack">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -258,7 +258,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeNetwork" value="Network" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeNetwork" value="Network" class="visually-hidden">
                 <label for="recordTypeNetwork">
                   <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path
@@ -268,10 +268,10 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="recordType" id="recordTypeAsset" value="Asset" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="recordType" id="recordTypeAsset" value="Asset" class="visually-hidden">
                 <label for="recordTypeAsset">
                   <svg width="20" height="20" viewBox="0 0 18 16" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
-                    <!-- Default: Donut (outline circle) -->
+                    <!-- Default icon path -->
                     <path
                       class="icon-default"
                       d="M14.5 9C14.5 6.6875 13.25 4.5625 11.25 3.375C9.21875 2.21875 6.75 2.21875 4.75 3.375C2.71875 4.5625 1.5 6.6875 1.5 9C1.5 11.3438 2.71875 13.4688 4.75 14.6562C6.75 15.8125 9.21875 15.8125 11.25 14.6562C13.25 13.4688 14.5 11.3438 14.5 9ZM0 9C0 6.15625 1.5 3.53125 4 2.09375C6.46875 0.65625 9.5 0.65625 12 2.09375C14.4688 3.53125 16 6.15625 16 9C16 11.875 14.4688 14.5 12 15.9375C9.5 17.375 6.46875 17.375 4 15.9375C1.5 14.5 0 11.875 0 9Z"
@@ -288,18 +288,18 @@
                 </label>
               </div>
               <div class="select-all">
-                <input type="checkbox" name="selectAllRecordTypes" id="selectAllRecordTypes">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="selectAllRecordTypes" id="selectAllRecordTypes">
                 <label for="selectAllRecordTypes">
                   <span>Select All</span>
                 </label>
               </div>
             </div>
           </fieldset>
-          <fieldset id="criteriaStepThree" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <fieldset data-workflow-builder-target="step" id="criteriaStepThree" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
             <legend>What should trigger this workflow?</legend>
             <div class="checkbox-container">
               <div class="selection-card">
-                <input type="checkbox" name="trigger" id="triggerRecordCreated" value="created" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="trigger" id="triggerRecordCreated" value="created" class="visually-hidden">
                 <label for="triggerRecordCreated">
                   <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path d="M7.75 1.25V6.25H12.75C13.1562 6.25 13.5 6.59375 13.5 7C13.5 7.4375 13.1562 7.75 12.75 7.75H7.75V12.75C7.75 13.1875 7.40625 13.5 7 13.5C6.5625 13.5 6.25 13.1875 6.25 12.75V7.75H1.25C0.8125 7.75 0.5 7.4375 0.5 7C0.5 6.59375 0.8125 6.25 1.25 6.25H6.25V1.25C6.25 0.84375 6.5625 0.5 7 0.5C7.40625 0.5 7.75 0.84375 7.75 1.25Z" />
@@ -308,7 +308,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="trigger" id="triggerRecordUpdated" value="updated" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="trigger" id="triggerRecordUpdated" value="updated" class="visually-hidden">
                 <label for="triggerRecordUpdated">
                   <svg width="17" height="17" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path d="M13.7812 2.84375H13.75C13.4688 2.5625 13 2.5625 12.7188 2.84375L11.7812 3.75L13.25 5.21875L14.1562 4.28125C14.4375 4 14.4375 3.53125 14.1562 3.21875L13.7812 2.84375ZM6.53125 9.03125C6.4375 9.09375 6.375 9.21875 6.34375 9.34375L5.8125 11.1562L7.65625 10.6562C7.78125 10.625 7.875 10.5625 7.96875 10.4688L12.1875 6.25L10.75 4.8125L6.53125 9.03125ZM11.6562 1.78125C12.5312 0.90625 13.9375 0.90625 14.8125 1.78125L15.2188 2.1875C16.0938 3.0625 16.0938 4.46875 15.2188 5.34375L9.03125 11.5312C8.78125 11.7812 8.4375 11.9688 8.0625 12.0938L4.9375 12.9688C4.6875 13.0625 4.40625 13 4.21875 12.7812C4 12.5938 3.9375 12.3125 4 12.0625L4.90625 8.9375C5 8.5625 5.21875 8.21875 5.46875 7.96875L11.6562 1.78125ZM2.75 3H6.25C6.65625 3 7 3.34375 7 3.75C7 4.1875 6.65625 4.5 6.25 4.5H2.75C2.03125 4.5 1.5 5.0625 1.5 5.75V14.25C1.5 14.9688 2.03125 15.5 2.75 15.5H11.25C11.9375 15.5 12.5 14.9688 12.5 14.25V10.75C12.5 10.3438 12.8125 10 13.25 10C13.6562 10 14 10.3438 14 10.75V14.25C14 15.7812 12.75 17 11.25 17H2.75C1.21875 17 0 15.7812 0 14.25V5.75C0 4.25 1.21875 3 2.75 3Z" fill="#242424"/>
@@ -317,7 +317,7 @@
                 </label>
               </div>
               <div class="conditional-btn-container">
-                <button type="button" class="btn-tertiary" id="conditionalButton">
+                <button type="button" class="btn-tertiary" id="conditionalButton" data-workflow-builder-target="conditionalButton">
                   <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.25 0.875V4.25H9.625C10.0234 4.25 10.375 4.60156 10.375 5C10.375 5.42188 10.0234 5.75 9.625 5.75H6.25V9.125C6.25 9.54688 5.89844 9.875 5.5 9.875C5.07812 9.875 4.75 9.54688 4.75 9.125V5.75H1.375C0.953125 5.75 0.625 5.42188 0.625 5C0.625 4.60156 0.953125 4.25 1.375 4.25H4.75V0.875C4.75 0.476562 5.07812 0.125 5.5 0.125C5.89844 0.125 6.25 0.476562 6.25 0.875Z" fill="#1849A9"/>
                   </svg>
@@ -325,15 +325,15 @@
                 </button>
               </div>
           </fieldset>
-          <fieldset id="criteriaStepFour" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <fieldset data-workflow-builder-target="step" id="criteriaStepFour" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
             <legend class="step-four-legend">What should happen once the workflow begins?</legend>
             <p class="helper-text">Select at least 1 action to continue. You can add additional actions later.</p>
             <div class="checkbox-container">
               <div class="selection-card">
-                <input type="checkbox" name="action" id="actionAddFlag" value="add a flag" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="action" id="actionAddFlag" value="add a flag" class="visually-hidden">
                 <label for="actionAddFlag">
                   <svg width="14" height="16" viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
-                    <!-- Default (unselected) icon -->
+                    <!-- Default icon path -->
                     <path
                       class="icon-default"
                       d="M1.5 0.75V1.625L4.15625 0.96875C5.34375 0.6875 6.59375 0.8125 7.6875 1.375C9.125 2.09375 10.8438 2.09375 12.2812 1.375L12.5938 1.21875C13.2188 0.90625 14 1.375 14 2.09375V10.8125C14 11.25 13.7188 11.5938 13.3438 11.75L12.25 12.1562C10.8125 12.7188 9.21875 12.625 7.8125 11.9375C6.625 11.3438 5.28125 11.1875 4 11.5L1.5 12.125V15.25C1.5 15.6875 1.15625 16 0.75 16C0.3125 16 0 15.6875 0 15.25V12.5V10.9688V2V0.75C0 0.34375 0.3125 0 0.75 0C1.15625 0 1.5 0.34375 1.5 0.75ZM1.5 3.1875V10.5938L3.625 10.0625C5.25 9.65625 7 9.84375 8.5 10.5938C9.5 11.0938 10.6562 11.1562 11.7188 10.75L12.5 10.4688V2.90625C10.7188 3.625 8.71875 3.5625 7.03125 2.71875C6.25 2.3125 5.34375 2.21875 4.5 2.4375L1.5 3.1875Z"
@@ -351,7 +351,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="action" id="actionSendEmail" value="send an email" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="action" id="actionSendEmail" value="send an email" class="visually-hidden">
                 <label for="actionSendEmail">
                   <svg width="16" height="12" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path d="M2 1.5C1.71875 1.5 1.5 1.75 1.5 2V2.71875L6.875 7.125C7.53125 7.65625 8.4375 7.65625 9.09375 7.125L14.5 2.71875V2C14.5 1.75 14.25 1.5 14 1.5H2ZM1.5 4.65625V10C1.5 10.2812 1.71875 10.5 2 10.5H14C14.25 10.5 14.5 10.2812 14.5 10V4.65625L10.0625 8.28125C8.84375 9.28125 7.125 9.28125 5.9375 8.28125L1.5 4.65625ZM0 2C0 0.90625 0.875 0 2 0H14C15.0938 0 16 0.90625 16 2V10C16 11.125 15.0938 12 14 12H2C0.875 12 0 11.125 0 10V2Z" fill="#242424"/>
@@ -360,7 +360,7 @@
                 </label>
               </div>
               <div class="selection-card">
-                <input type="checkbox" name="action" id="actionSendWebhook" value="send a webhook" class="visually-hidden">
+                <input type="checkbox" data-action="change->workflow-builder#toggle" name="action" id="actionSendWebhook" value="send a webhook" class="visually-hidden">
                 <label for="actionSendWebhook">
                   <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="selection-icon">
                     <path d="M10.5625 2.5625C9.1875 2.28125 7.875 3.09375 7.5625 4.4375C7.3125 5.53125 7.78125 6.59375 8.65625 7.125C8.8125 7.25 8.9375 7.40625 9 7.59375C9.03125 7.8125 9 8 8.90625 8.15625L6.3125 12.3125C6.4375 12.5312 6.5 12.75 6.5 13C6.5 13.8438 5.8125 14.5 5 14.5C4.15625 14.5 3.5 13.8438 3.5 13C3.5 12.1875 4.15625 11.5 5 11.5H5.03125L7.28125 7.9375C6.25 7 5.75 5.5625 6.09375 4.125C6.59375 1.96875 8.71875 0.625 10.875 1.125C12.9375 1.59375 14.25 3.5625 13.9375 5.625C13.875 6.03125 13.5 6.3125 13.0938 6.25C12.6875 6.1875 12.4062 5.8125 12.4688 5.40625C12.6562 4.125 11.8438 2.875 10.5625 2.5625ZM10 4.5C9.71875 4.5 9.5 4.75 9.5 5C9.5 5.28125 9.71875 5.5 10 5.5C10.25 5.5 10.5 5.28125 10.5 5C10.5 4.75 10.25 4.5 10 4.5ZM11.3125 5.71875L13.5312 9.28125C14.9688 8.71875 16.6562 9.03125 17.8125 10.1875C19.375 11.75 19.375 14.2812 17.8125 15.8438C16.4688 17.1875 14.4062 17.375 12.875 16.4062C12.5 16.1875 12.4062 15.7188 12.625 15.375C12.8438 15.0312 13.3125 14.9062 13.6562 15.125C14.625 15.75 15.9062 15.625 16.75 14.7812C17.7188 13.8125 17.7188 12.2188 16.75 11.25C15.9062 10.4062 14.625 10.2812 13.6562 10.9062C13.5 11 13.2812 11.0312 13.0938 11C12.9062 10.9375 12.7188 10.8125 12.625 10.6562L10.0312 6.5H10C9.15625 6.5 8.5 5.84375 8.5 5C8.5 4.1875 9.15625 3.5 10 3.5C10.8125 3.5 11.5 4.1875 11.5 5C11.5 5.28125 11.4375 5.5 11.3125 5.71875ZM4.5 13C4.5 13.2812 4.71875 13.5 5 13.5C5.25 13.5 5.5 13.2812 5.5 13C5.5 12.75 5.25 12.5 5 12.5C4.71875 12.5 4.5 12.75 4.5 13ZM14.5 13C14.5 13.2812 14.7188 13.5 15 13.5C15.25 13.5 15.5 13.2812 15.5 13C15.5 12.75 15.25 12.5 15 12.5C14.7188 12.5 14.5 12.75 14.5 13ZM16.5 13C16.5 13.8438 15.8125 14.5 15 14.5C14.4375 14.5 13.9375 14.2188 13.6875 13.75H8.90625C8.625 15.2812 7.46875 16.5312 5.875 16.9062C3.71875 17.4062 1.59375 16.0625 1.09375 13.9062C0.65625 11.9688 1.6875 10.0625 3.4375 9.3125C3.84375 9.15625 4.28125 9.34375 4.4375 9.71875C4.59375 10.0938 4.40625 10.5312 4.03125 10.7188C2.90625 11.1562 2.28125 12.375 2.5625 13.5625C2.875 14.9062 4.1875 15.75 5.5625 15.4375C6.71875 15.1875 7.5 14.1562 7.5 13C7.5 12.8125 7.5625 12.625 7.71875 12.4688C7.84375 12.3438 8.03125 12.25 8.25 12.25H13.6875C13.9375 11.8125 14.4375 11.5 15 11.5C15.8125 11.5 16.5 12.1875 16.5 13Z" fill="#242424"/>
@@ -371,25 +371,25 @@
             </div>
           
           </fieldset>
-          <fieldset id="criteriaStepFive" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
+          <fieldset data-workflow-builder-target="step" id="criteriaStepFive" class="criteriaStep hidden" role="tabpanel" aria-hidden="true">
             <legend>Review your workflow below. Click a step to make edits if needed.</legend>
             <div class="review" aria-live="polite">
-              <div id="reviewContent" class="review-content-section"></div>
+              <div id="reviewContent" data-workflow-builder-target="review" class="review-content-section"></div>
             </div>
           </fieldset>
         </div>
         
         <div class="form-footer" role="group" aria-label="Form navigation">
           <div class="btn-container">
-            <button type="button" class="btn-link" id="backButton" aria-label="Go back to previous step">
+            <button type="button" class="btn-link" id="backButton" data-workflow-builder-target="back" data-action="click->workflow-builder#previous" aria-label="Go back to previous step">
               <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.960938 4.48438L4.71094 0.734375C4.99219 0.429688 5.48438 0.429688 5.76562 0.734375C6.07031 1.01562 6.07031 1.50781 5.76562 1.78906L3.30469 4.25H10.5C10.8984 4.25 11.25 4.60156 11.25 5C11.25 5.42188 10.8984 5.75 10.5 5.75H3.30469L5.76562 8.23438C6.07031 8.51562 6.07031 9.00781 5.76562 9.28906C5.48438 9.59375 4.99219 9.59375 4.71094 9.28906L0.960938 5.53906C0.65625 5.25781 0.65625 4.76562 0.960938 4.48438Z" fill="#2F6DE9"/>
               </svg>
              <span>Back</span>
             </button>
             <div class="save-buttons">
-              <button type="button" class="btn-secondary" id="saveButton">Save and Finish Later</button>
-              <button type="button" class="btn-primary" id="nextButton">Next</button>
+              <button type="button" class="btn-secondary" id="saveButton" data-workflow-builder-target="save">Save and Finish Later</button>
+              <button type="button" class="btn-primary" id="nextButton" data-workflow-builder-target="next" data-action="click->workflow-builder#next">Next</button>
             </div>
           </div>
         </div>

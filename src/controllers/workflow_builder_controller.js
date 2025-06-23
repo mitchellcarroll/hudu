@@ -1,437 +1,208 @@
 import { Controller } from "@hotwired/stimulus";
 
-/**
- * WorkflowBuilder controller to handle multi-step form functionality
- */
-export default class WorkflowBuilder extends Controller {
-  // Define Stimulus targets for elements we'll interact with
-  static targets = [];
 
+export default class extends Controller {
+
+  static targets = [
+    "step", // Each <fieldset> on the page
+    "progressStep", // Nav indicator elements
+    "next", // "Next / Save Draft" button (footer)
+    "back", // "Back" button (footer)
+    "save", // "Save & finish later" button (footer)
+    "review", // Container that holds the generated workflow summary
+    "conditionalButton" // "Add Condition" button (trigger step)
+  ];
+
+  /** @type {number} */
+  currentStepIndex = 0;
+
+  /** Called once when the controller is connected to the DOM */
   connect() {
-    /** @type {HTMLFormElement} */
-    this.form = document.forms.namedItem('workflowBuilder');
-    /** @type {HTMLFieldSetElement[]} */
-    this.steps = Array.from(this.form.querySelectorAll('.criteriaStep'));
-    /** @type {HTMLButtonElement} */
-    this.nextButton = this.form.querySelector('#nextButton');
-    /** @type {HTMLButtonElement} */
-    this.backButton = this.form.querySelector('#backButton');
-    /** @type {HTMLButtonElement} */
-    this.saveButton = this.form.querySelector('#saveButton');
-    /** @type {HTMLButtonElement} */
-    this.conditionalButton = this.form.querySelector('#conditionalButton');
-    /** @type {NodeListOf<HTMLDivElement>} */
-    this.progressSteps = this.form.querySelectorAll('.progress-step');
-    /** @type {number} */
-    this.currentStepIndex = 0;
-
-    if (!this.form || !this.nextButton || !this.backButton || !this.saveButton) {
-      console.error('Required form elements not found');
-      return;
+    // Ensure we start at page 0 if the attribute is missing
+    if (isNaN(this.currentStepIndex)) {
+      this.currentStepIndex = 0;
     }
 
-    // Bind methods to preserve 'this' context
-    this.goToNextStep = this.goToNextStep.bind(this);
-    this.goToPreviousStep = this.goToPreviousStep.bind(this);
-    this.validateCurrentStep = this.validateCurrentStep.bind(this);
-    this.updateSelectionClass = this.updateSelectionClass.bind(this);
-    this.showConditionalButton = this.showConditionalButton.bind(this);
-
-    this.initializeForm();
-    this.setupEventListeners();
+    this.showCurrentStep();
+    this.validate();
   }
+
+  /* ------------------------------------------------------------------
+   * Data actions
+   * ------------------------------------------------------------------*/
 
   /**
-   * 
-   * @param {HTMLInputElement} checkbox 
+   * Checkbox change handler toggles selected class on its card and re-validates.
+   * Bound in markup via `data-action="change->workflow-builder#toggle"`.
    */
-  updateSelectionClass(checkbox) {
-    const container = checkbox.closest('.selection-card') || checkbox.closest('.select-all');
-    if (container) {
-      container.classList.toggle('selected', checkbox.checked);
+  toggle(event) {
+    const cb = event.target;
+    const card = cb.closest(".selection-card, .select-all");
+    if (card != null) {
+      card.classList.toggle("selected", cb.checked);
     }
-  }
-
-  /**
-   * Set up all event listeners for form navigation and validation
-   */
-  setupEventListeners() {
-    if (this.nextButton && this.backButton) {
-      this.nextButton.addEventListener('click', this.goToNextStep);
-      this.backButton.addEventListener('click', this.goToPreviousStep);
-    }
-
-    if (this.steps && this.steps.length > 0) {
-      this.steps.forEach(step => {
-        /** @type {NodeListOf<HTMLInputElement>} */
-        const checkboxes = step.querySelectorAll('input[type="checkbox"]');
-      
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('change', () => {
-            this.validateCurrentStep();
-            this.updateSelectionClass(checkbox);
-            this.showConditionalButton();
-          });
-      
-          this.updateSelectionClass(checkbox);
-        });
+    // Handle select-all logic (Criteria step) automatically keep other checkboxes in sync
+    if (cb.name === "selectAllRecordTypes") {
+      const boxes = this.element.querySelectorAll("input[name='recordType']");
+      boxes.forEach(b => {
+        b.checked = cb.checked;
+        b.closest('.selection-card')?.classList.toggle('selected', b.checked);
       });
     }
 
-    /** @type {HTMLInputElement} */
-    const selectAllCheckbox = this.form.elements['selectAllRecordTypes'];
-    if (selectAllCheckbox) {
-      selectAllCheckbox.addEventListener('change', () => {
-        /** @type {NodeListOf<HTMLInputElement>} */
-        const recordTypeCheckboxes = this.form.elements['recordType'];
-        Array.from(recordTypeCheckboxes).forEach(checkbox => {
-          checkbox.checked = selectAllCheckbox.checked;
-          // update parent with selected class
-          const container = checkbox.closest('.selection-card');
-          if (container) {
-            if (selectAllCheckbox.checked) {
-              container.classList.add('selected');
-            } else {
-              container.classList.remove('selected');
-            }
-          }
-        });
-        this.validateCurrentStep();
-      });
-
-      /** @type {NodeListOf<HTMLInputElement>} */
-      const recordTypeCheckboxes = this.form.elements['recordType'];
-      Array.from(recordTypeCheckboxes).forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-          const allChecked = Array.from(recordTypeCheckboxes).every(cb => cb.checked);
-          selectAllCheckbox.checked = allChecked;
-        });
-      });
-    }
-  }
-
-  showConditionalButton() {
+    // Show/hide "Add Condition" button based on checkbox state in Trigger Step
     if (this.currentStepIndex === 2) {
-      this.conditionalButton.classList.remove('hidden');
+      const anyChecked = Array.from(this.currentStepTarget.querySelectorAll("input[type=checkbox]"))
+        .some(box => box.checked);
+      this.conditionalButtonTarget.classList.toggle("hidden", !anyChecked);
     } else {
-      this.conditionalButton.classList.add('hidden');
-    }
-  }
-
-  /**
-   * Initialize the form state by setting up initial visibility and validation
-   */
-  initializeForm() {
-    // Hide all steps except the first one
-    this.steps.forEach((step, index) => {
-      if (index === 0) {
-        step.classList.remove('hidden');
-        step.setAttribute('aria-hidden', 'false');
-      } else {
-        step.classList.add('hidden');
-        step.setAttribute('aria-hidden', 'true');
-      }
-    });
-
-    this.updateProgressIndicator();
-
-    this.backButton.classList.add('hidden');
-    this.nextButton.disabled = true;
-    this.saveButton.classList.add('hidden');
-    this.validateCurrentStep();
-  }
-
-  /**
-   * Validate the current step by checking if at least one checkbox is selected
-   * @returns {boolean} - Whether the current step is valid
-   */
-  validateCurrentStep() {
-    return this.validateStep(this.currentStepIndex);
-  }
-
-  /**
-   * Validate a specific step by checking if at least one checkbox is selected
-   * @param {number} stepIndex - The index of the step to validate
-   * @returns {boolean} - Whether the step is valid
-   */
-  validateStep(stepIndex) {
-    const step = this.steps[stepIndex];
-    if (!step) return false;
-
-    /** @type {NodeListOf<HTMLInputElement>} */
-    const checkboxes = step.querySelectorAll('input[type="checkbox"]');
-    if (checkboxes.length === 0) return true; // If no checkboxes, consider valid
-
-    const isValid = Array.from(checkboxes).some(checkbox => checkbox.checked);
-
-    // Only update the next button if this is the current step
-    if (stepIndex === this.currentStepIndex) {
-      this.nextButton.disabled = !isValid;
+      this.conditionalButtonTarget.classList.add("hidden");
     }
 
-    return isValid;
+    this.validate();
   }
 
   /**
-   * Go to the next step in the form
+   * Handle click on the "Next / Save Draft" button.
    */
-  goToNextStep() {
-    if (this.currentStepIndex < this.steps.length - 1 && this.validateCurrentStep()) {
-      // Hide current step
-      this.steps[this.currentStepIndex].classList.add('hidden');
-      this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'true');
+  next() {
+    // Prevent advancing if current step fails validation
+    if (!this.validate()) return;
 
-      // Show next step
-      this.currentStepIndex++;
-      this.steps[this.currentStepIndex].classList.remove('hidden');
-      this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'false');
-
-      this.updateProgressIndicator();
-      this.updateNavigationButtons();
-
-      // If we're on the review step, update the summary
-      if (this.currentStepIndex === this.steps.length - 1) {
-        this.updateReviewSummary();
-      }
-
-      this.form.scrollIntoView({ behavior: 'smooth' });
-
-      this.validateCurrentStep();
-    }
-  }
-
-  /**
-   * Go to the previous step in the form
-   */
-  goToPreviousStep() {
-    if (this.currentStepIndex > 0) {
-      // Hide current step
-      this.steps[this.currentStepIndex].classList.add('hidden');
-      this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'true');
-
-      // Show previous step
-      this.currentStepIndex--;
-      this.steps[this.currentStepIndex].classList.remove('hidden');
-      this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'false');
-
-      this.updateProgressIndicator();
-      this.updateNavigationButtons();
-
-      this.form.scrollIntoView({ behavior: 'smooth' });
-
-      this.validateCurrentStep();
-    }
-  }
-
-  /**
-   * Update the progress indicator to reflect current step and completed steps
-   */
-  updateProgressIndicator() {
-    if (!this.progressSteps) {
+    if (this.isReviewStep) {
+      // Submit or "save draft" logic would live here.
+      // For now we simply bail out.
       return;
     }
 
-    /**
-     * Map fieldset indices to progress step indices
-     * We have 5 fieldsets but only 4 nav links
-     * @param {number} fieldsetIndex
-     * @returns {number}
-     */
-    const getProgressStepIndex = (fieldsetIndex) => {
-      if (fieldsetIndex === 0 || fieldsetIndex === 1) {
-        return 0; // First two fieldsets map to first nav link
-      } else {
-        return fieldsetIndex - 1; // Other fieldsets map to nav links offset by 1
-      }
-    };
+    this.currentStepIndex++;
+    this.showCurrentStep();
+    this.validate();
+  }
 
-    /**
-     * Map progress step indices to fieldset indices
-     * @param {number} progressStepIndex
-     * @returns {number}
-     */
-    const getFieldsetIndex = (progressStepIndex) => {
-      if (progressStepIndex === 0) {
-        return 0; // First nav link maps to first fieldset
-      } else {
-        return progressStepIndex + 1; // Other nav links map to fieldsets offset by 1
-      }
-    };
+  /** Handle click on the "Back" button */
+  previous() {
+    if (this.currentStepIndex === 0) return;
 
-    /**
-     * Update progress steps
-     */
-    this.progressSteps.forEach((step, progressStepIndex) => {
-      const stepLink = step.querySelector('a');
-      const currentProgressStepIndex = getProgressStepIndex(this.currentStepIndex);
+    this.currentStepIndex--;
+    this.showCurrentStep();
+    this.validate();
+  }
 
-      // Check if this step should be enabled based on validation
-      const shouldBeEnabled = progressStepIndex <= currentProgressStepIndex;
+  /**
+   * Handle click on a progress-indicator step.
+   * Only allows navigating to already-completed steps.
+   */
+  goToStep(event) {
+    const navIdx = this.progressStepTargets.indexOf(event.currentTarget);
+    const targetStep = navIdx === 0 ? 0 : navIdx + 1;
 
-      // Special case: Second nav link (Trigger) should only be enabled if both first and second fieldsets are valid
-      const isSecondNavLink = progressStepIndex === 1;
-      const firstStepValid = this.validateStep(0);
-      const secondStepValid = this.validateStep(1);
+    if (targetStep <= this.currentStepIndex) {
+      this.currentStepIndex = targetStep;
+      this.showCurrentStep();
+      this.validate();
+    }
+  }
 
-      // For the second nav link, we need both first and second steps to be valid
-      const secondNavLinkEnabled = isSecondNavLink ? (firstStepValid && secondStepValid) : true;
+  /**
+   * Re-run validation for the current step and update UI accordingly.
+   * Returns `true` if the step is valid.
+   */
+  validate() {
+    const checkboxes = this.currentStepTarget.querySelectorAll("input[type=checkbox]");
+    const valid = Array.from(checkboxes).some(cb => cb.checked);
 
-      // Determine if this nav link should be enabled
-      const isEnabled = shouldBeEnabled && secondNavLinkEnabled;
+    this.nextTarget.disabled = !valid;
+    this.saveTarget.classList.toggle("hidden", this.currentStepIndex <= 1);
 
-      if (progressStepIndex < currentProgressStepIndex) {
-        // Completed steps
-        step.classList.add('completed');
-        step.classList.remove('active');
-        step.setAttribute('aria-selected', 'false');
+    if (this.isReviewStep) this.updateReviewSummary();
 
-        // Enable link for completed steps
-        if (stepLink) {
-          stepLink.classList.remove('disabled');
-          stepLink.setAttribute('tabindex', '0');
-          stepLink.addEventListener('click', (e) => this.handleStepLinkClick(e, getFieldsetIndex(progressStepIndex)));
-        }
-      } else if (progressStepIndex === currentProgressStepIndex) {
-        // Current step
-        step.classList.add('active');
-        step.classList.remove('completed');
-        step.setAttribute('aria-selected', 'true');
+    return valid;
+  }
 
-        // Enable link for current step
-        if (stepLink) {
-          stepLink.classList.remove('disabled');
-          stepLink.setAttribute('tabindex', '0');
-          stepLink.addEventListener('click', (e) => this.handleStepLinkClick(e, getFieldsetIndex(progressStepIndex)));
-        }
-      } else {
-        // Future steps
-        step.classList.remove('active', 'completed');
-        step.setAttribute('aria-selected', 'false');
+  /* ------------------------------------------------------------------
+   * Private helpers
+   * ------------------------------------------------------------------*/
 
-        // Disable link for future steps
-        if (stepLink) {
-          stepLink.classList.add('disabled');
-          stepLink.setAttribute('tabindex', '-1');
+  /**
+   * Update *all* pieces of UI so they reflect `currentStepIndex`.
+   */
+  showCurrentStep() {
+    this.stepTargets.forEach((step, i) => {
+      const active = i === this.currentStepIndex;
+      step.hidden = !active;
+      step.classList.toggle("hidden", !active);
+      step.setAttribute("aria-hidden", (!active).toString());
+    });
+    const progressIdx = this.currentStepIndex <= 1 ? 0 : this.currentStepIndex - 1;
+    this.progressStepTargets.forEach((nav, i) => {
+      const link = nav.querySelector('a');
+      const isCurrent   = i === progressIdx;
+      const isComplete  = i <  progressIdx;
+      nav.classList.toggle('active',  isCurrent);
+      nav.classList.toggle('completed', isComplete);
 
-          // Remove previous event listeners and add a new one that prevents navigation
-          stepLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            return false;
-          });
-        }
+      if (link) {
+        const disabled = !isComplete && !isCurrent;
+        link.classList.toggle('disabled', disabled);
+        link.tabIndex = disabled ? -1 : 0;
       }
     });
+    this.backTarget.classList.toggle("hidden", this.currentStepIndex === 0);
+    this.nextTarget.textContent = this.isReviewStep ? "Save Draft" : "Next";
   }
 
   /**
-   * Handle click on step links in the progress indicator
-   * @param {Event} e - The click event
-   * @param {number} stepIndex - The index of the step to navigate to
-   */
-  handleStepLinkClick(e, stepIndex) {
-    e.preventDefault();
-
-    // Only allow navigation to completed steps or the current step
-    if (stepIndex <= this.currentStepIndex) {
-      // Hide current step
-      this.steps[this.currentStepIndex].classList.add('hidden');
-      this.steps[this.currentStepIndex].setAttribute('aria-hidden', 'true');
-
-      // Show target step
-      this.currentStepIndex = stepIndex;
-      this.steps[stepIndex].classList.remove('hidden');
-      this.steps[stepIndex].setAttribute('aria-hidden', 'false');
-
-      // Update UI
-      this.updateProgressIndicator();
-      this.updateNavigationButtons();
-
-      // Scroll to top of the form
-      this.form.scrollIntoView({ behavior: 'smooth' });
-
-      // Validate the new step
-      this.validateCurrentStep();
-
-      // If we're on the review step, update the summary
-      if (this.currentStepIndex === this.steps.length - 1) {
-        this.updateReviewSummary();
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Update navigation buttons visibility based on current step
-   */
-  updateNavigationButtons() {
-    if (this.currentStepIndex === 0) {
-      this.backButton.classList.add('hidden');
-    } else {
-      this.backButton.classList.remove('hidden');
-    }
-
-    if (this.currentStepIndex > 1) {
-      this.saveButton.classList.remove('hidden');
-    } else {
-      this.saveButton.classList.add('hidden');
-    }
-
-    if (this.currentStepIndex === this.steps.length - 1) {
-      this.nextButton.textContent = 'Save Draft';
-    } else {
-      this.nextButton.textContent = 'Next';
-    }
-  }
-
-  /**
-   * Updates the review summary section with the user's selections
+   * Builds the human-readable summary shown on the review step.
    */
   updateReviewSummary() {
-    /** @type {HTMLDivElement} */
-    const reviewContent = this.form.querySelector('#reviewContent');
-    if (!reviewContent) return;
+    // Clear any existing content
+    this.reviewTarget.innerHTML = "";
 
-    // Clear previous content
-    reviewContent.innerHTML = '';
+    // Collect checked values by input name
+    const selected = name => [
+      ...this.element.querySelectorAll(`input[name='${name}']:checked`)
+    ].map(cb => cb.value);
 
-    // Get selected record types
-    const selectedRecordTypes = Array.from(this.form.elements['recordType'])
-      .filter(checkbox => checkbox.checked)
-      .map(checkbox => checkbox.value);
+    const recordTypes = selected("recordType");
+    const triggers    = selected("trigger");
+    const actions     = selected("action");
 
-    // Get selected triggers
-    const selectedTriggers = Array.from(this.form.elements['trigger'])
-      .filter(checkbox => checkbox.checked)
-      .map(checkbox => checkbox.value);
+    if (recordTypes.length && triggers.length && actions.length) {
+      const formatList = (arr, conj = "and") => {
+        if (arr.length === 1) return arr[0];
+        if (arr.length === 2) return `${arr[0]} ${conj} ${arr[1]}`;
+        return `${arr.slice(0, -1).join(", ")}, ${conj} ${arr[arr.length - 1]}`;
+      };
 
-    // Get selected actions
-    const selectedActions = Array.from(this.form.elements['action'])
-      .filter(checkbox => checkbox.checked)
-      .map(checkbox => checkbox.value);
+      const triggerText = formatList(triggers, "or");
+      const actionText  = formatList(actions, "and");
 
-    // Create summary elements
-    if (selectedRecordTypes.length > 0 && selectedTriggers.length > 0 && selectedActions.length > 0) {
-      const triggerText = selectedTriggers.join(' or ');
-      const actionText = selectedActions.join(' and ');
-      const summaryParagraph = document.createElement('p');
-      summaryParagraph.textContent = `When any of the following record types is ${triggerText}, ${actionText}.`;
-      reviewContent.appendChild(summaryParagraph);
+      const p = document.createElement("p");
+      p.textContent = `When any of the following record types is ${triggerText}, ${actionText}.`;
+      this.reviewTarget.appendChild(p);
 
-      const recordTypeList = document.createElement('ul');
-      selectedRecordTypes.forEach(recordType => {
-        const listItem = document.createElement('li');
-        listItem.textContent = recordType;
-        recordTypeList.appendChild(listItem);
+      const ul = document.createElement("ul");
+      recordTypes.forEach(rt => {
+        const li = document.createElement("li");
+        li.textContent = rt;
+        ul.appendChild(li);
       });
-
-      reviewContent.appendChild(recordTypeList);
+      this.reviewTarget.appendChild(ul);
     } else {
-      // If any selection is missing, show an error message
-      const errorMessage = document.createElement('p');
-      errorMessage.textContent = 'Please complete all previous steps before reviewing.';
-      errorMessage.classList.add('error-message');
-      reviewContent.appendChild(errorMessage);
+      // User should never get here, but just in case
+      const err = document.createElement("p");
+      err.className = "error-message";
+      err.textContent = "Please complete all previous steps before reviewing.";
+      this.reviewTarget.appendChild(err);
     }
+  }
+
+  get isReviewStep() {
+    return this.currentStepIndex === this.stepTargets.length - 1;
+  }
+
+  get currentStepTarget() {
+    return this.stepTargets[this.currentStepIndex];
   }
 }
