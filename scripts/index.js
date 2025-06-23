@@ -106,7 +106,10 @@ class WorkflowBuilder {
   }
 
   showConditionalButton() {
-    if (this.currentStepIndex === 2) {
+    const hasTriggerSelected = Array
+    .from(this.form.querySelectorAll('input[name="trigger"]'))
+    .some(cb => cb.checked);
+    if (this.currentStepIndex === 2 && hasTriggerSelected) {
       this.conditionalButton.classList.remove('hidden');
     } else {
       this.conditionalButton.classList.add('hidden');

@@ -249,7 +249,6 @@ button {
 .form-footer {
   padding: 8px 16px;
   border-top: 1px solid var(--color-light-gray);
-  box-shadow: 4px 0 6px rgba(19, 1, 54, 0.16);
 }
 
 .btn-container {
@@ -297,6 +296,9 @@ button {
   background-color: var(--color-primary);
   color: var(--color-white);
   max-width: 280px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: .1px;
 }
 
 .btn-primary:focus-visible {
@@ -344,6 +346,8 @@ input:focus-visible + label {
 .selection-card label span {
   font-size: var(--font-size-base);
   font-weight: 500;
+  line-height: 20px;
+  letter-spacing: .1px;
 }
 
 .selection-icon {
@@ -361,7 +365,7 @@ input:focus-visible + label {
 
 .selection-card.selected {
   background-color: var(--color-blue-selected);
-  border-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
 }
 
 .selection-card.selected .selection-icon .icon-default {
@@ -414,6 +418,12 @@ input:focus-visible + label {
   font-weight: 500;
   line-height: 20px;
   letter-spacing: .1px;
+}
+
+.select-all-checkbox {
+  height: 20px;
+  width: 20px;
+  accent-color: var(--color-primary);
 }
 
 
