@@ -53,6 +53,24 @@ Hudu/
 3. **Open the classic standalone version (without Vite)**  
    Simply double-click `index.html` if you prefer not to use the dev server or drag-and-drop it into your browser. Since the application is fully client-side, no server, bundler, or compiler is required.
 
+---
+
+## Running Tests
+
+The project uses [Vitest](https://vitest.dev/) with the JSDOM environment.
+
+```bash
+# ensure dependencies are installed
+npm install
+
+# run all tests in watch mode
+npm run test
+```
+
+The basic test suite exercises utility functions and UI helpers. 
+
+---
+
 ## Clearing Your Draft
 
 Open the developer console and run:
