@@ -16,6 +16,8 @@ git switch hotwire   # or: git checkout hotwire
 
 That branch includes its own README with instructions specific how to run that version of the application. 
 
+It can also be reviewed on GitHub at https://github.com/mitchellcarroll/hudu/tree/hotwire
+
 ---
 
 ## Folder Structure
