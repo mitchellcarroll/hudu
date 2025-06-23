@@ -383,6 +383,21 @@ class WorkflowBuilder {
   }
 
   /**
+   * Format a list of items into natural language with commas and a conjunction.
+   * @param {string[]} items
+   * @param {string} conjunction - 'and' or 'or'
+   * @returns {string}
+   */
+  formatList(items, conjunction = 'and') {
+    if (items.length === 0) return '';
+    if (items.length === 1) return items[0];
+    if (items.length === 2) return `${items[0]} ${conjunction} ${items[1]}`;
+    const allButLast = items.slice(0, -1).join(', ');
+    const last = items[items.length - 1];
+    return `${allButLast}, ${conjunction} ${last}`;
+  }
+
+  /**
    * Updates the review summary section with the user's selections
    */
   updateReviewSummary() {
@@ -410,8 +425,8 @@ class WorkflowBuilder {
 
     // Create summary elements
     if (selectedRecordTypes.length > 0 && selectedTriggers.length > 0 && selectedActions.length > 0) {
-      const triggerText = selectedTriggers.join(' or ');
-      const actionText = selectedActions.join(' and ');
+      const triggerText = this.formatList(selectedTriggers, 'or');
+      const actionText = this.formatList(selectedActions, 'and');
       const summaryParagraph = document.createElement('p');
       summaryParagraph.textContent = `When any of the following record types is ${triggerText}, ${actionText}.`;
       reviewContent.appendChild(summaryParagraph);
