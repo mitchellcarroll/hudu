@@ -1,7 +1,7 @@
 /**
  * WorkflowBuilder class to handle multi-step form functionality
  */
-class WorkflowBuilder {
+export class WorkflowBuilder {
   constructor() {
     /** @type {HTMLFormElement} */
     this.form = document.forms.namedItem('workflowBuilder');
